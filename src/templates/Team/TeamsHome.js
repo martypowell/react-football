@@ -21,7 +21,6 @@ class TeamsHome extends Component {
         fetch("http://localhost:1919/teams")
             .then(res => res.json())
             .then(teams => {
-                console.log(teams);
                 this.setState({
                     teams: teams,
                     isLoaded: true
@@ -32,11 +31,15 @@ class TeamsHome extends Component {
     render() {
         return (
             <React.Fragment>
-                {
-                    this.state.teams.map(team => {
-                        return <List key={team._id}>{team.name}</List>;
-                    })
-                }
+                <List>
+                    {
+                            this.state.teams.map(team => {
+                                return <List.Item key={team._id}>
+                                            <List.Content ><Link to={`/teams/${team._id}`}>{team.name}</Link></List.Content>
+                                        </List.Item>
+                            })
+                    }
+                </List>
             </React.Fragment>
         );
     }

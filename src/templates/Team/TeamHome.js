@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Container } from 'semantic-ui-react';
 
 import {
     BrowserRouter as Router,
@@ -10,17 +11,18 @@ class TeamHome extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            teams: [],
+            team: {},
             isLoaded: false
         };
     }
 
     componentDidMount() {
-        fetch("http://localhost:1919/teams")
+        const teamId = this.props.match.params.id;
+        fetch(`http://localhost:1919/teams/${teamId}`)
             .then(res => res.json())
-            .then(teams => {
+            .then(team => {
                 this.setState({
-                    teams: teams,
+                    team,
                     isLoaded: true
                 })
             },
@@ -36,18 +38,14 @@ class TeamHome extends Component {
     }
 
     render() {
-        const { name, wins, losses, draws } = this.props;
+        const { name, league, stadium } = this.state.team;
         const getPoints = (wins, draws) => (wins * 3) + draws;
         return (
-            <div>
+            <Container>
                 <h1>{name}</h1>
-                <div className="results">
-                    <p className="wins">Wins: {wins}</p>
-                    <p className="losses">Losses: {losses}</p>
-                    <p className="draws">Draws: {draws}</p>
-                    <p className="summary">{ getPoints(wins, draws) } Points</p>
-                </div>
-            </div>
+                <p>{league}</p>
+                <p>{stadium}</p>
+            </Container>
         );
     }
 }
